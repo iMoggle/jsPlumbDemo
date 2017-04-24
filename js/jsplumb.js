@@ -1925,6 +1925,7 @@
                 focusDropElement = null;
 
 
+
             this.params.setPosition(dragEl, cPos);
             for (var i = 0; i < matchingDroppables.length; i++) {
                 var r2 = {
@@ -3550,7 +3551,7 @@
 
     var jsPlumbInstance = root.jsPlumbInstance = function (_defaults) {
 
-        this.version = "2.3.2";
+        this.version = "2.3.5";
 
         if (_defaults) jsPlumb.extend(this.Defaults, _defaults);
 
@@ -5813,6 +5814,7 @@
             return _elEach(el, function (_el) {
                 var elId = isIdAlready ? _el : _currentInstance.getId(_el);
                 _currentInstance.updateOffset({elId: elId, recalc: true, timestamp: timestamp});
+                _currentInstance.getDragManager().updateOffsets(elId);
                 _currentInstance.repaint(_el);
             });
         };
@@ -12273,12 +12275,14 @@
         //
         function _pruneOrOrphan(p) {
             if (!_isInsideParent(p.el, p.pos)) {
-                p.el._jsPlumbGroup.remove(p.el);
+                var group = p.el._jsPlumbGroup;
                 if (prune) {
                     _jsPlumb.remove(p.el);
                 } else {
                     _orphan(p.el);
                 }
+
+                group.remove(p.el);
             }
         }
 
@@ -13913,6 +13917,7 @@
                     ghostProxy: "jtk-ghost-proxy"
                 }
             });
+            k.setZoom(instance.getZoom());
             instance[key] = k;
             instance.bind("zoom", k.setZoom);
         }

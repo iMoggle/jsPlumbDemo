@@ -14,47 +14,17 @@
         color: #ffffff;
     }
 
-    .pregunta1 {
-        background-color: #2b669a;
-    }
-
-    .pregunta2 {
-        background-color: #761c19;
-    }
-
     .row {
         margin-top: 1em;
+    }
+
+    .layout {
+        background-color: darkgray;
     }
 </style>
 <body>
 <div>
     <div id="layout_tabla">
-        <div class="row">
-            <div class="col-md-1"></div>
-            <div class="col-md-4 pregunta pregunta1" id="pregunta1">
-                <h4>Pregunta 1</h4>
-                <p>Esta es una pregunta cualquiera</p>
-            </div>
-            <div class="col-md-2 "></div>
-            <div class="col-md-4 respuesta" id="respuesta1">
-                <h4>Respuesta 1</h4>
-                <p>Esta es una respuesta cualquiera</p>
-                <div class="col-md-1"></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-1"></div>
-            <div class="col-md-4 pregunta pregunta2" id="pregunta2">
-                <h4>Pregunta 2</h4>
-                <p>Esta es una pregunta cualquiera</p>
-            </div>
-            <div class="col-md-2 "></div>
-            <div class="col-md-4 respuesta" id="respuesta2">
-                <h4>Respuesta 2</h4>
-                <p>Esta es una respuesta cualquiera</p>
-            </div>
-            <div class="col-md-1"></div>
-        </div>
 
     </div>
 </div>
@@ -64,28 +34,72 @@
 <script type="text/javascript" src="js/jsplumb.js"></script>
 <script type="text/javascript">
     jsPlumb.ready(function () {
+        getRandomPreguntas(getRandomArbitrary(1, 10));
+
         $(".pregunta").each(function (index) {
             var div_color = $(this).css("background-color");
-            var resp_div = $(this).attr("id");
-            resp_div = "respuesta" + resp_div.substring(8);
             jsPlumb.makeSource($(this), {
-                connector: 'Bezier',
+                connector: 'StateMachine',
+                connectorStyle: {
+                    lineWidth: 4,
+                    outlineStroke: div_color
+                },
                 maxConnections: 1,
                 anchor: "RightMiddle",
-                paintStyle: {fill: div_color, outlineStroke: div_color, outlineWidth: 1},
-            });
-
-            jsPlumb.makeTarget($('#' + resp_div), {
-                anchor: 'Continuous',
-                maxConnections: 1,
-                paintStyle: {fill: div_color, outlineStroke: div_color, outlineWidth: 1},
+                paintStyle: {fill: div_color, outlineStroke: div_color, outlineWidth: 3}
             });
         });
 
-        jsPlumb.bind("connection", function (e) {
+        jsPlumb.makeTarget($('.respuesta'), {
+            anchor: 'Continuous',
+            maxConnections: 1,
+            paintStyle: {fill: "white", strokeStyle: "white", outlineStroke: "transparent", outlineWidth: 1}
+        });
 
-        })
+        jsPlumb.bind("connection", function (e) {
+            asignarColorDiv(e.sourceId, e.targetId, e.connection);
+        });
+
+        jsPlumb.bind("connectionMoved", function (e) {
+            $("#" + e.originalTargetId).css("background-color", "white");
+        });
+
+        jsPlumb.bind("connectionDetached", function (e) {
+            $("#" + e.targetId).css("background-color", "white");
+        });
+
+
     });
+
+    function asignarColorDiv(source, target, connection) {
+        var id_source = "#" + source;
+        var color_source = $(id_source).css("background-color");
+        $("#" + target).css("background-color", color_source);
+        connection.getEndpoints().setPaintStyle({fill: "red"}, true);
+
+
+    }
+
+    function getRandomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+    function getRandomPreguntas(num_preguntas) {
+        var numero = $(".pregunta").length;
+        for (var x = numero + 1; x <= numero + num_preguntas; x++) {
+            var pregunta = '<div class="row"><div class="col-md-1"></div><div class="col-md-4 pregunta" style="background-color: ' + getRandomColor() + '" id="pregunta' + x + '"><h4>Pregunta ' + x + '</h4><p>Esta es una pregunta cualquiera</p></div><div class="col-md-2 "></div><div class="col-md-4 respuesta" id="respuesta' + x + '"><h4>Respuesta ' + x + '</h4><p>Esta es una respuesta cualquiera</p><div class="col-md-1"></div></div></div>';
+            $("#layout_tabla").append(pregunta);
+        }
+    }
+
+    function getRandomArbitrary(min, max) {
+        return Math.random() * (max - min) + min;
+    }
 </script>
 </body>
 </html>
