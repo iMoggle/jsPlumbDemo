@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es_mx">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Ejemplo Relacion Columnas</title>
+    <link href="css/bootstrap.css" rel="stylesheet"/>
+</head>
+
+<style>
+    .pregunta {
+        color: #ffffff;
+    }
+
+    .pregunta1 {
+        background-color: #2b669a;
+    }
+
+    .pregunta2 {
+        background-color: #761c19;
+    }
+
+    .row {
+        margin-top: 1em;
+    }
+</style>
+<body>
+<div>
+    <div id="layout_tabla">
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-4 pregunta pregunta1" id="pregunta1">
+                <h4>Pregunta 1</h4>
+                <p>Esta es una pregunta cualquiera</p>
+            </div>
+            <div class="col-md-2 "></div>
+            <div class="col-md-4 respuesta" id="respuesta1">
+                <h4>Respuesta 1</h4>
+                <p>Esta es una respuesta cualquiera</p>
+                <div class="col-md-1"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-4 pregunta pregunta2" id="pregunta2">
+                <h4>Pregunta 2</h4>
+                <p>Esta es una pregunta cualquiera</p>
+            </div>
+            <div class="col-md-2 "></div>
+            <div class="col-md-4 respuesta" id="respuesta2">
+                <h4>Respuesta 2</h4>
+                <p>Esta es una respuesta cualquiera</p>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript" src="js/jquery-3.2.1.js"></script>
+<script type="text/javascript" src="js/bootstrap.js"></script>
+<script type="text/javascript" src="js/jsplumb.js"></script>
+<script type="text/javascript">
+    jsPlumb.ready(function () {
+        $(".pregunta").each(function (index) {
+            var div_color = $(this).css("background-color");
+            var resp_div = $(this).attr("id");
+            resp_div = "respuesta" + resp_div.substring(8);
+            jsPlumb.makeSource($(this), {
+                connector: 'Bezier',
+                maxConnections: 1,
+                anchor: "RightMiddle",
+                paintStyle: {fill: div_color, outlineStroke: div_color, outlineWidth: 1},
+            });
+
+            jsPlumb.makeTarget($('#' + resp_div), {
+                anchor: 'Continuous',
+                maxConnections: 1,
+                paintStyle: {fill: div_color, outlineStroke: div_color, outlineWidth: 1},
+            });
+        });
+
+        jsPlumb.bind("connection", function (e) {
+
+        })
+    });
+</script>
+</body>
+</html>
