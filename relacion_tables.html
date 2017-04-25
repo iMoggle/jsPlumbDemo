@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es_mx">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Ejemplo Relacion Columnas con tablas</title>
+    <link href="css/bootstrap.css" rel="stylesheet"/>
+</head>
+<body>
+<div id="layout_tabla" class="container">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Columna 1</th>
+            <th></th>
+            <th>Columna 2</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="pregunta">Pregunta 1</td>
+            <td></td>
+            <td class="respuesta">Respuesta 2</td>
+        </tr>
+        <tr>
+            <td class="pregunta">Pregunta 2</td>
+            <td></td>
+            <td class="respuesta">Respuesta 3</td>
+        </tr>
+        <tr>
+            <td class="pregunta">Pregunta 3</td>
+            <td></td>
+            <td class="respuesta">Respuesta 4</td>
+        </tr>
+        <tr>
+            <td class="pregunta">Pregunta 4</td>
+            <td></td>
+            <td class="respuesta">Respuesta 1</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script type="text/javascript" src="js/jquery-3.2.1.js"></script>
+<script type="text/javascript" src="js/bootstrap.js"></script>
+<script type="text/javascript" src="js/jsplumb.js"></script>
+<script type="text/javascript">
+    jsPlumb.ready(function () {
+        jsPlumb.setContainer("layout_tabla");
+    });
+</script>
+
+</body>
+</html>
