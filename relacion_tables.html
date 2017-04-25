@@ -13,9 +13,9 @@
     <table class="table">
         <thead>
         <tr>
-            <th>Columna 1</th>
+            <th>Preguntas</th>
             <th></th>
-            <th>Columna 2</th>
+            <th>Respuestas</th>
         </tr>
         </thead>
         <tbody>
@@ -49,8 +49,47 @@
 <script type="text/javascript">
     jsPlumb.ready(function () {
         jsPlumb.setContainer("layout_tabla");
+        $(".pregunta").each(function (index) {
+            var div_color = getRandomColor();
+            jsPlumb.makeSource($(this), {
+                connector: 'StateMachine',
+                connectorStyle: {
+                    lineWidth: 4,
+                    outlineStroke: div_color
+                },
+                maxConnections: 1,
+                anchor: "RightMiddle",
+                paintStyle: {fill: div_color, outlineStroke: div_color, outlineWidth: 3}
+            });
+            $(this).attr("fill", div_color);
+        });
+
+        jsPlumb.bind("connection", function (e) {
+            asignarColorDiv(e.sourceId, e.targetEndpoint);
+        });
+
+        $(".respuesta").each(function (index) {
+
+            jsPlumb.makeTarget($(this), {
+                anchor: 'Continuous',
+                maxConnections: 1,
+            });
+        });
+
+        function asignarColorDiv(sourceId, targetend) {
+            var endpoint = $("#" + sourceId).attr("fill");
+            targetend.setPaintStyle({fill: endpoint});
+        }
+
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
     });
 </script>
-
 </body>
 </html>
