@@ -52,6 +52,7 @@
                 anchor: "RightMiddle",
                 paintStyle: {fill: div_color, outlineStroke: div_color, outlineWidth: 3}
             });
+            $(this).attr("fill", div_color);
         });
 
         jsPlumb.makeTarget($('.respuesta'), {
@@ -61,7 +62,7 @@
         });
 
         jsPlumb.bind("connection", function (e) {
-            asignarColorDiv(e.sourceId, e.targetId, e.connection);
+            asignarColor(e);
         });
 
         jsPlumb.bind("connectionMoved", function (e) {
@@ -84,10 +85,25 @@
         });
     });
 
+    function asignarColor(e) {
+        var opcion = getUrlVars()["opcion"];
+        if (opcion == 1) {
+            asignarColorDiv(e.sourceId, e.targetId, e.connection);
+        }
+        else {
+            asignarColorEndpoint(e.sourceId, e.targetEndpoint);
+        }
+    }
+
     function asignarColorDiv(source, target) {
         var id_source = "#" + source;
         var color_source = $(id_source).css("background-color");
         $("#" + target).css("background-color", color_source);
+    }
+
+    function asignarColorEndpoint(sourceId, targetend) {
+        var endpoint = $("#" + sourceId).attr("fill");
+        targetend.setPaintStyle({fill: endpoint});
     }
 
     function getRandomColor() {
@@ -110,6 +126,15 @@
     function getRandomArbitrary(min, max) {
         return Math.random() * (max - min) + min;
     }
+
+    function getUrlVars() {
+        var vars = {};
+        var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
+            vars[key] = value;
+        });
+        return vars;
+    }
+
 </script>
 </body>
 </html>
