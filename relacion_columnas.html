@@ -27,12 +27,16 @@
     <div id="layout_tabla">
 
     </div>
+    <div>
+        <button id="btnRevisar" class="btn btn-primary">Revisar</button>
+    </div>
 </div>
 
 <script type="text/javascript" src="js/jquery-3.2.1.js"></script>
 <script type="text/javascript" src="js/bootstrap.js"></script>
 <script type="text/javascript" src="js/jsplumb.js"></script>
 <script type="text/javascript">
+
     jsPlumb.ready(function () {
         getRandomPreguntas(getRandomArbitrary(1, 10));
 
@@ -68,16 +72,22 @@
             $("#" + e.targetId).css("background-color", "white");
         });
 
-
+        $("#btnRevisar").click(function () {
+            var lstConnections = jsPlumb.getAllConnections();
+            if (lstConnections.length > 0) {
+                for (var x = 0; x <= lstConnections.length; x++) {
+                    alert(lstConnections[x].targetId + "," + lstConnections[x].sourceId);
+                }
+            } else {
+                alert("No hay relaciones hechas");
+            }
+        });
     });
 
-    function asignarColorDiv(source, target, connection) {
+    function asignarColorDiv(source, target) {
         var id_source = "#" + source;
         var color_source = $(id_source).css("background-color");
         $("#" + target).css("background-color", color_source);
-        connection.getEndpoints().setPaintStyle({fill: "red"}, true);
-
-
     }
 
     function getRandomColor() {
